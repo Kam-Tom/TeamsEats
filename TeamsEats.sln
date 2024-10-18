@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A9E3F50B-275E-4AF7-ADCE-8BE12D41E305}") = "TeamsApp", "TeamsApp\TeamsApp.ttkproj", "{D45E3020-33A6-4911-BF8D-95364B46F539}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamsEats.Server", "TeamsEats.Server\TeamsEats.Server.csproj", "{7314C520-242F-4BC3-9BB6-29C0A0A5ED45}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "teamseats.client", "teamseats.client\teamseats.client.esproj", "{D6EB52F0-B56E-4A25-9B18-33957D850CFE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D45E3020-33A6-4911-BF8D-95364B46F539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45E3020-33A6-4911-BF8D-95364B46F539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45E3020-33A6-4911-BF8D-95364B46F539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45E3020-33A6-4911-BF8D-95364B46F539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7314C520-242F-4BC3-9BB6-29C0A0A5ED45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7314C520-242F-4BC3-9BB6-29C0A0A5ED45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7314C520-242F-4BC3-9BB6-29C0A0A5ED45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7314C520-242F-4BC3-9BB6-29C0A0A5ED45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B6DC692-9A9E-40D8-99D1-2B98B4D9D8A7}
+	EndGlobalSection
+EndGlobal
