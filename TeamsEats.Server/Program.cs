@@ -1,7 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using TeamsEats.Application;
+using TeamsEats.Infrastructure;
+using TeamsEats.Server.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -11,10 +17,11 @@ builder.Services.AddSwaggerGen();
 // Add CORS services and define a policy that allows all origins
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.AddPolicy("AllowSpecificOrigin", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("https://localhost:44302")
                .AllowAnyMethod()
+               .AllowCredentials()
                .AllowAnyHeader();
     });
 });
@@ -25,6 +32,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .EnableTokenAcquisitionToCallDownstreamApi()
             .AddMicrosoftGraph(builder.Configuration.GetSection("MicrosoftGraph"))
             .AddInMemoryTokenCaches();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -40,7 +49,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll"); // Apply the CORS policy
+app.UseCors("AllowSpecificOrigin"); // Apply the CORS policy
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -48,5 +57,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+app.MapHub<GroupOrderHub>("/groupOrderHub");
 
 app.Run();

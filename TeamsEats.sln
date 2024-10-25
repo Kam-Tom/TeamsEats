@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamsEats.Server", "TeamsEa
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "teamseats.client", "teamseats.client\teamseats.client.esproj", "{D6EB52F0-B56E-4A25-9B18-33957D850CFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamsEats.Application", "TeamsEats.Application\TeamsEats.Application.csproj", "{83D5BEE1-F82D-4646-A0BB-D87A70E52509}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamsEats.Domain", "TeamsEats.Domain\TeamsEats.Domain.csproj", "{0F14E077-6622-4278-A280-F7BDDFAA931B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamsEats.Infrastructure", "TeamsEats.Infrastructure\TeamsEats.Infrastructure.csproj", "{8EAC97A2-205A-4873-9236-097EFC3ED195}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +35,18 @@ Global
 		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6EB52F0-B56E-4A25-9B18-33957D850CFE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{83D5BEE1-F82D-4646-A0BB-D87A70E52509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83D5BEE1-F82D-4646-A0BB-D87A70E52509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83D5BEE1-F82D-4646-A0BB-D87A70E52509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83D5BEE1-F82D-4646-A0BB-D87A70E52509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F14E077-6622-4278-A280-F7BDDFAA931B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F14E077-6622-4278-A280-F7BDDFAA931B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F14E077-6622-4278-A280-F7BDDFAA931B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F14E077-6622-4278-A280-F7BDDFAA931B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EAC97A2-205A-4873-9236-097EFC3ED195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EAC97A2-205A-4873-9236-097EFC3ED195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EAC97A2-205A-4873-9236-097EFC3ED195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EAC97A2-205A-4873-9236-097EFC3ED195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
