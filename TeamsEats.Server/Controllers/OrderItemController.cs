@@ -42,7 +42,10 @@ public class OrderItemController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
+        var orderItem = await _mediator.Send(new OrderItemQuery(id));
         await _mediator.Send(new DeleteOrderItemCommand(id));
+        await _hubContext.Clients.All.SendAsync("GroupOrderUpdated", orderItem.GroupOrderId);
+
         return Ok();
     }
 

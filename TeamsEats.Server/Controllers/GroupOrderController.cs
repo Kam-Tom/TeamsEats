@@ -44,12 +44,4 @@ public class GroupOrderController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _mediator.Send(new DeleteGroupOrderCommand(id));
-        await _hubContext.Clients.All.SendAsync("GroupOrderDeleted", id);
-        return Ok();
-    }
-
 }

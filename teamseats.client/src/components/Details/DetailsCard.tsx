@@ -154,7 +154,7 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwnedByUser, authorName, res
                     <Subtitle2>Items</Subtitle2>
                     <ItemForm groupOrderId={id} />
                     {orderItems.map((item) => (
-                        <ItemCard key={item.id} {...item} groupOrderId={id} canComment={isOwnedByUser} deliveryCost={deliveryCost} />
+                        <ItemCard key={item.id} {...item} groupOrderId={id} canComment={isOwnedByUser} canEdit={item.isOwner && status == Status.Open} deliveryCost={deliveryCost} />
                     ))}
                 </div>
             </Card>

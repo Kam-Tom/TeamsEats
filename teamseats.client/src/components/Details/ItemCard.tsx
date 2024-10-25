@@ -9,8 +9,10 @@ import {
     PopoverTrigger,
     PopoverSurface,
     useId,
-    Input
+    Input,
+    tokens,
 } from '@fluentui/react-components';
+import { Icon } from '@fluentui/react/lib/Icon';
 import { Card, CardHeader, makeStyles } from '@fluentui/react-components';
 import { ItemData } from '../../models/ItemData';
 import { TeamsFxContext } from '../Context';
@@ -54,13 +56,30 @@ const useStyles = makeStyles({
         right: '1rem',
         top: '50%',
         transform: 'translateY(-50%)',
-    }
+        display: 'flex',
 
+    },
+    deleteButton: {
+        backgroundColor: tokens.colorTransparentBackground,
+        position: 'absolute',
+        bottom: '0px',
+        left: '0px',
+        width: '0.2rem',
+        height: '0.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonIcon: {
+        fontSize: '1rem',
+        color: tokens.colorPaletteRedBackground3,
+    },
 });
 
 interface OrderItemCardProps extends ItemData {
     canComment: boolean;
     deliveryCost: number;
+    canEdit: boolean;
 }
 
 const OrderItemCard: React.FC<OrderItemCardProps> = ({
@@ -74,7 +93,7 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
     additionalInfo,
     id,
     deliveryCost,
-
+    canEdit,
 }) => {
     const [comment, setComment] = useState('');
     const popoverId = useId();
@@ -82,7 +101,6 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
     const classes = useStyles();
 
     const photoSrc = authorPhoto ? (authorPhoto.startsWith('data:image') ? authorPhoto : `data:image/jpeg;base64,${authorPhoto}`) : '/path/to/default/avatar.png';
-
 
     const handleCommentChange = (event: ChangeEvent<HTMLInputElement>) => {
         setComment(event.target.value);
@@ -117,6 +135,29 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
         }
     };
 
+    const handleDelete = async () => {
+        if (!teamsUserCredential) return;
+
+        const token = await teamsUserCredential.getToken("");
+
+        try {
+            const response = await fetch(`https://localhost:7125/OrderItem/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token!.token}`
+                }
+            });
+
+            if (response.ok) {
+                // Handle successful deletion (e.g., refresh data or show a success message)
+            } else {
+                console.error(`Failed to delete order item: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Error during order item deletion:', error);
+        }
+    };
+
     return (
         <Card orientation="horizontal" className={classes.card}>
             <CardHeader
@@ -135,8 +176,15 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
                     <Text className={classes.additionalInfo}>{additionalInfo}</Text>
                 </Tooltip>
             </div>
+            {canEdit && (
+                <button onClick={handleDelete} className={classes.deleteButton}>
+                    <Icon iconName="Delete" className={classes.buttonIcon} />
+                </button>
+            )}
             <div className={classes.buttonWrapper}>
-                {isOwner && <EditForm dishName={dishName} itemId={id} groupOrderId={groupOrderId} price={price.toString()} additionalInfo={additionalInfo}  ></EditForm>}
+                {canEdit && (
+                    <EditForm dishName={dishName} itemId={id} groupOrderId={groupOrderId} price={price.toString()} additionalInfo={additionalInfo} />
+                )}
                 {(canComment && !isOwner) && (
                     <Popover trapFocus>
                         <PopoverTrigger disableButtonEnhancement>

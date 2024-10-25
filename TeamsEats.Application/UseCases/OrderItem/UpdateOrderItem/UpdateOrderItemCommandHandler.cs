@@ -33,8 +33,5 @@ public class UpdateOrderItemCommandHandler : IRequestHandler<UpdateOrderItemComm
         orderItem.DishName = request.UpdateOrderItemDTO.DishName;
 
         await _orderItemsRepository.UpdateOrderItemAsync(orderItem);
-
-        //await _graphService.SendActivityFeed();
-
     }
 }

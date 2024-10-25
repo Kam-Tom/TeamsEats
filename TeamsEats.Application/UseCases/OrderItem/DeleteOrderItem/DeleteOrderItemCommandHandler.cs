@@ -31,8 +31,6 @@ public class DeleteOrderItemCommandHandler: IRequestHandler<DeleteOrderItemComma
 
         await _orderItemsRepository.DeleteOrderItemAsync(orderItem);
 
-        //await _graphService.SendActivityFeed();
-
     }
 
 }
