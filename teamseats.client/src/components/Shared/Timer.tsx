@@ -19,10 +19,8 @@ const Timer: React.FC<TimerProps> = ({ targetTime }) => {
 
     const getTime = () => {
         const time = new Date(targetTime).getTime() - Date.now();
-
         const h = Math.max(Math.floor((time / (1000 * 60 * 60)) % 24), 0);
         const m = Math.max(Math.floor((time / 1000 / 60) % 60), 0);
-
         setHours(h);
         setMinutes(m);
 
@@ -30,7 +28,7 @@ const Timer: React.FC<TimerProps> = ({ targetTime }) => {
 
     useEffect(() => {
         getTime();
-        const interval = setInterval(() => getTime(), 60000);
+        const interval = setInterval(() => getTime(), 1000);
 
         return () => clearInterval(interval);
     }, [targetTime]);

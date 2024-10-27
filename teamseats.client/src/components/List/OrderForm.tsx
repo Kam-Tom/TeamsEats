@@ -105,11 +105,13 @@ const OrderForm: React.FC = () => {
             if (!teamsUserCredential) return;
             const token = await teamsUserCredential.getToken("");
 
-
             const today = new Date();
             const [hours, minutes] = formData.closingTime.split(':');
+
             today.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-            const closingTimeISO = today.toISOString();
+
+            const closingTimeISO = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString();
+
 
             const formattedData = {
                 phoneNumber: formData.phoneNumber,
@@ -120,6 +122,7 @@ const OrderForm: React.FC = () => {
                 minimalPriceForFreeDelivery: parseFloat(formData.minimalPriceForFreeDelivery),
                 closingTime: closingTimeISO
             };
+
             const response = await fetch('https://localhost:7125/GroupOrder', {
                 method: 'POST',
                 headers: {
