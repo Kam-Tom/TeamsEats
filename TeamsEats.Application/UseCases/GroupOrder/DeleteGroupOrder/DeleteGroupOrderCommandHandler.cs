@@ -30,10 +30,13 @@ public class DeleteGroupOrderCommandHandler : IRequestHandler<DeleteGroupOrderCo
 
         var addressees = groupOrder.OrderItems.Select(o => o.UserId).Where(id => id != userId);
 
+        var feedTasks = new List<Task>();
         foreach (var addressee in addressees)
         {
-            await _graphService.SendActivityFeedTypeDeleted(userId, addressee, groupOrder.RestaurantName);
+            feedTasks.Add(_graphService.SendActivityFeedTypeDeleted(userId, addressee, groupOrder.RestaurantName));
         }
+
+        await Task.WhenAll(feedTasks);
 
     }
 }

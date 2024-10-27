@@ -29,13 +29,16 @@ public class ChangeGroupOrdersStatusCommandHandler : IRequestHandler<ChangeGroup
 
         var addressees = groupOrder.OrderItems.Select(o => o.UserId).Where(id => id != userId);
 
+        var feedTasks = new List<Task>();
+
         foreach (var addressee in addressees)
         {
-            if(groupOrder.Status == GroupOrderStatus.Delivered)
-                await _graphService.SendActivityFeedTypeDelivered(userId, addressee, groupOrder.Id);
+            if (groupOrder.Status == GroupOrderStatus.Delivered)
+                feedTasks.Add(_graphService.SendActivityFeedTypeDelivered(userId, addressee, groupOrder.Id));
             else if (groupOrder.Status == GroupOrderStatus.Closed)
-                await _graphService.SendActivityFeedTypeClosed(userId, addressee, groupOrder.RestaurantName, groupOrder.Id);
-          
+                feedTasks.Add(_graphService.SendActivityFeedTypeClosed(userId, addressee, groupOrder.RestaurantName, groupOrder.Id));
         }   
+
+        await Task.WhenAll(feedTasks);
     }
 }
