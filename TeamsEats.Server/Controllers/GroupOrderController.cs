@@ -23,21 +23,21 @@ public class GroupOrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<IEnumerable<GroupOrderLiteDTO>>> GetAll()
     {
         var groupOrders = await _mediator.Send(new GetGroupOrdersLiteQuery());
         return Ok(groupOrders);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<ActionResult<GroupOrderLiteDTO>> Get(int id)
     {
         var groupOrder = await _mediator.Send(new GetGroupOrderLiteQuery(id));
         return Ok(groupOrder);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateGroupOrderDTO groupOrder)
+    public async Task<ActionResult> Create([FromBody] CreateGroupOrderDTO groupOrder)
     {
         var id = await _mediator.Send(new CreateGroupOrderCommand(groupOrder));
         await _hubContext.Clients.All.SendAsync("GroupOrderCreated", id);

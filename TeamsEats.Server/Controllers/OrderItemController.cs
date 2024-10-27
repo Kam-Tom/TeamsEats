@@ -24,7 +24,7 @@ public class OrderItemController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateOrderItemDTO orderItem)
+    public async Task<ActionResult> Create([FromBody] CreateOrderItemDTO orderItem)
     {
         await _mediator.Send(new CreateOrderItemCommand(orderItem));
         await _hubContext.Clients.All.SendAsync("GroupOrderUpdated", orderItem.GroupOrderId);
@@ -32,7 +32,7 @@ public class OrderItemController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> Update([FromBody] UpdateOrderItemDTO orderItem)
+    public async Task<ActionResult> Update([FromBody] UpdateOrderItemDTO orderItem)
     {
         await _mediator.Send(new UpdateOrderItemCommand(orderItem));
         await _hubContext.Clients.All.SendAsync("GroupOrderUpdated", orderItem.GroupOrderId);
@@ -40,7 +40,7 @@ public class OrderItemController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
         var orderItem = await _mediator.Send(new OrderItemQuery(id));
         await _mediator.Send(new DeleteOrderItemCommand(id));
@@ -50,7 +50,7 @@ public class OrderItemController : ControllerBase
     }
 
     [HttpPost("SendComment")]
-    public async Task<IActionResult> CommentOrderItem([FromBody] CommentOrderItemDTO commentOrderItemDTO)
+    public async Task<ActionResult> CommentOrderItem([FromBody] CommentOrderItemDTO commentOrderItemDTO)
     {
         await _mediator.Send(new CommentOrderItemCommand(commentOrderItemDTO));
         return Ok();
