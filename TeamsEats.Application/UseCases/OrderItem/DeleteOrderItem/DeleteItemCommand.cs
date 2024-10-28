@@ -1,5 +1,5 @@
 ﻿using MediatR;
 using TeamsEats.Application.DTOs;
-
 namespace TeamsEats.Application.UseCases;
-public record CommentItemCommand(CommentItemDTO CommentItemDTO) : IRequest;
+
+public record DeleteItemCommand(int Id) : IRequest;

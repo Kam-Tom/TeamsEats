@@ -15,6 +15,7 @@ import { Status } from "../../models/Status";
 import ItemForm from './ItemForm';
 import { TeamsFxContext } from '../Context';
 import Timer from '../Shared/Timer';
+import { ItemData } from '../../models/ItemData';
 
 const useStyles = makeStyles({
     wrapper: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles({
 
 
 
-const DetailsCard: React.FC<DetailsData> = ({ id, isOwnedByUser, authorName, restaurant, phoneNumber, bankAccount, minimalPrice, deliveryCost, minimalPriceForFreeDelivery, orderItems, status, closingTime }) => {
+const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restaurant, phoneNumber, bankAccount, minimalPrice, deliveryCost, minimalPriceForFreeDelivery, items, status, closingTime }) => {
 
     const { teamsUserCredential } = React.useContext(TeamsFxContext);
     const classes = useStyles();
@@ -55,12 +56,11 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwnedByUser, authorName, res
 
         const token = await teamsUserCredential.getToken("");
         const changeStatusDTO = {
-            GroupOrderID: id,
             Status: newStatus
         };
 
         try {
-            const response = await fetch('https://localhost:7125/GroupOrderDetails', {
+            const response = await fetch(`https://localhost:7125/order/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwnedByUser, authorName, res
         const token = await teamsUserCredential.getToken("");
 
         try {
-            const response = await fetch(`https://localhost:7125/GroupOrderDetails/${id}`, {
+            const response = await fetch(`https://localhost:7125/order/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token!.token}`
@@ -132,7 +132,7 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwnedByUser, authorName, res
                         <Body1>{`Bank account: ${bankAccount}`}</Body1>
                     </div>
                 </div>
-                {isOwnedByUser && (
+                {isOwner && (
                     <div>
                         <div className={classes.dropdownContainer}>
                             <label htmlFor="status-dropdown" className={classes.label}>Change Status</label>
@@ -152,9 +152,9 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwnedByUser, authorName, res
                 )}
                 <div className={classes.section}>
                     <Subtitle2>Items</Subtitle2>
-                    <ItemForm groupOrderId={id} />
-                    {orderItems.map((item) => (
-                        <ItemCard key={item.id} {...item} groupOrderId={id} canComment={isOwnedByUser} canEdit={item.isOwner && status == Status.Open} deliveryCost={deliveryCost} />
+                    <ItemForm orderId={id} />
+                    {items.map((item: ItemData) => (
+                        <ItemCard key={item.id} {...item} orderId={id} canComment={isOwner} canEdit={item.isOwner && status == Status.Open} deliveryCost={deliveryCost} />
                     ))}
                 </div>
             </Card>

@@ -2,8 +2,8 @@ import { Status } from "./Status";
 
 export interface OrderData {
     id: number;
-    isOwnedByUser: boolean;
-    hasItemInOrder: boolean;
+    isOwner: boolean;
+    isParticipating: boolean;
     authorName: string;
     authorPhoto: string;
     deliveryCost: number;

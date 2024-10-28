@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 interface FormData {
     phoneNumber: string;
-    restaurantName: string;
+    restaurant: string;
     bankAccount: string;
     minimalPrice: string;
     deliveryFee: string;
@@ -44,7 +44,7 @@ interface FormData {
 
 interface FormErrors {
     phoneNumber?: string;
-    restaurantName?: string;
+    restaurant?: string;
     bankAccount?: string;
     minimalPrice?: string;
     deliveryFee?: string;
@@ -57,7 +57,7 @@ const OrderForm: React.FC = () => {
     const classes = useStyles();
     const [formData, setFormData] = useState<FormData>({
         phoneNumber: '',
-        restaurantName: '',
+        restaurant: '',
         bankAccount: '',
         minimalPrice: '',
         deliveryFee: '',
@@ -74,12 +74,21 @@ const OrderForm: React.FC = () => {
 
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
-        if (!formData.phoneNumber || !formData.bankAccount) {
-            newErrors.phoneNumber = 'Phone number or bank account is required.';
-            newErrors.bankAccount = 'Phone number or bank account is required.';
+
+        if (!formData.phoneNumber) {
+            newErrors.phoneNumber = 'Phone number is required.';
+        } else if (formData.phoneNumber.length < 9 || formData.phoneNumber.length > 11) {
+            newErrors.phoneNumber = 'Phone number must be between 9 and 11 characters.';
         }
-        if (!formData.restaurantName) {
-            newErrors.restaurantName = 'Restaurant name is required.';
+
+        if (!formData.bankAccount) {
+            newErrors.bankAccount = 'Bank account is required.';
+        } else if (formData.bankAccount.length < 8 || formData.bankAccount.length > 17) {
+            newErrors.bankAccount = 'Bank account must be between 8 and 17 characters.';
+        }
+
+        if (!formData.restaurant) {
+            newErrors.restaurant = 'Restaurant name is required.';
         }
         if (!formData.minimalPrice || parseFloat(formData.minimalPrice) <= 0) {
             newErrors.minimalPrice = 'Minimal price must be a positive number.';
@@ -112,18 +121,17 @@ const OrderForm: React.FC = () => {
 
             const closingTimeISO = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString();
 
-
             const formattedData = {
                 phoneNumber: formData.phoneNumber,
-                restaurantName: formData.restaurantName,
                 bankAccount: formData.bankAccount,
+                restaurant: formData.restaurant,
                 minimalPrice: parseFloat(formData.minimalPrice),
                 deliveryFee: parseFloat(formData.deliveryFee),
                 minimalPriceForFreeDelivery: parseFloat(formData.minimalPriceForFreeDelivery),
                 closingTime: closingTimeISO
             };
 
-            const response = await fetch('https://localhost:7125/GroupOrder', {
+            const response = await fetch('https://localhost:7125/Order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -161,18 +169,19 @@ const OrderForm: React.FC = () => {
                                 name="phoneNumber"
                                 value={formData.phoneNumber}
                                 onChange={handleChange}
+                                required
                             />
                         </Field>
 
                         <Field className={classes.field}
                             label="Restaurant Name"
-                            validationState={errors.restaurantName ? 'error' : 'none'}
-                            validationMessage={errors.restaurantName}
+                            validationState={errors.restaurant ? 'error' : 'none'}
+                            validationMessage={errors.restaurant}
                         >
                             <Input
-                                id="restaurantName"
-                                name="restaurantName"
-                                value={formData.restaurantName}
+                                id="restaurant"
+                                name="restaurant"
+                                value={formData.restaurant}
                                 onChange={handleChange}
                                 required
                             />
@@ -188,6 +197,7 @@ const OrderForm: React.FC = () => {
                                 name="bankAccount"
                                 value={formData.bankAccount}
                                 onChange={handleChange}
+                                required
                             />
                         </Field>
 

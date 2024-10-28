@@ -17,8 +17,8 @@ public static class DependencyInjection
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("TeamsEats.Infrastructure"));
         });
-        services.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
-        services.AddScoped<IGroupOrderRepository, GroupOrderRepository>();
+        services.AddScoped<IItemRepository, ItemsRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
 
         services.AddScoped<IGraphService, GraphService>();
 

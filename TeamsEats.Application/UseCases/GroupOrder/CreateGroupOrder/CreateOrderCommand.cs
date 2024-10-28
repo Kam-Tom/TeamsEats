@@ -2,4 +2,6 @@
 using TeamsEats.Application.DTOs;
 
 namespace TeamsEats.Application.UseCases;
-public record CommentItemCommand(CommentItemDTO CommentItemDTO) : IRequest;
+
+public record CreateOrderCommand(CreateOrderDTO CreateOrderDTO) : IRequest<int>;
+

@@ -81,7 +81,7 @@ const ListPage: React.FC = () => {
             if (!teamsUserCredential) return;
             const token = await teamsUserCredential.getToken("");
 
-            const response = await fetch('https://localhost:7125/GroupOrder', {
+            const response = await fetch('https://localhost:7125/order', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token!.token}`
@@ -107,7 +107,7 @@ const ListPage: React.FC = () => {
             if (!teamsUserCredential) return;
             const token = await teamsUserCredential.getToken("");
 
-            const response = await fetch(`https://localhost:7125/GroupOrder/${id}`, {
+            const response = await fetch(`https://localhost:7125/order/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token!.token}`
@@ -143,25 +143,25 @@ const ListPage: React.FC = () => {
             const token = await teamsUserCredential.getToken("");
 
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl('https://localhost:7125/groupOrderHub', {
+                .withUrl('https://localhost:7125/orderHub', {
                     accessTokenFactory: () => token!.token
                 })
                 .withAutomaticReconnect()
                 .build();
 
-            connection.on('GroupOrderCreated', async (groupOrderId: number) => {
-                const data = await fetchOne(groupOrderId);
+            connection.on('OrderCreated', async (id: number) => {
+                const data = await fetchOne(id);
                 if (data) {
                     setCardsData(prevData => [...prevData, data]);
                 }
             });
 
-            connection.on('GroupOrderDeleted', async (groupOrderId: number) => {
-                setCardsData(prevData => prevData.filter(order => order.id !== groupOrderId));
+            connection.on('OrderDeleted', async (id: number) => {
+                setCardsData(prevData => prevData.filter(order => order.id !== id));
             });
 
-            connection.on('GroupOrderUpdated', async (groupOrderId: number) => {
-                const data = await fetchOne(groupOrderId);
+            connection.on('OrderUpdated', async (id: number) => {
+                const data = await fetchOne(id);
                 if (data) {
                     setCardsData(prevData => prevData.map(order => order.id === data.id ? data : order));
                 }

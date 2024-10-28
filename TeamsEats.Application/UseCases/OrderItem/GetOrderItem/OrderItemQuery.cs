@@ -2,4 +2,4 @@
 using TeamsEats.Application.DTOs;
 namespace TeamsEats.Application.UseCases;
 
-public record OrderItemQuery(int id) : IRequest<OrderItemDTO>;
+public record ItemQuery(int Id) : IRequest<ItemDTO>;

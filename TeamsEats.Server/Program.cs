@@ -58,6 +58,6 @@ app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
-app.MapHub<GroupOrderHub>("/groupOrderHub");
+app.MapHub<OrderHub>("/orderHub");
 
 app.Run();

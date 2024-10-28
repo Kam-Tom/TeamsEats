@@ -15,23 +15,23 @@ import {
 import { TeamsFxContext } from '../Context';
 
 interface FormData {
-    dishName: string;
+    dish: string;
     price: string;
     additionalInfo: string;
-    groupOrderId: number;
+    orderId: number;
     itemId: number;
 }
 
 interface FormErrors {
-    dishName?: string;
+    dish?: string;
     price?: string;
 }
 
 interface OrderItemFormProps {
-    dishName: string;
+    dish: string;
     price: string;
     additionalInfo: string;
-    groupOrderId: number;
+    orderId: number;
     itemId: number;
 }
 
@@ -54,14 +54,14 @@ const useStyles = makeStyles({
     },
 });
 
-const EditForm: React.FC<OrderItemFormProps> = ({ groupOrderId, itemId, dishName, price, additionalInfo }) => {
+const EditForm: React.FC<OrderItemFormProps> = ({ orderId, itemId, dish, price, additionalInfo }) => {
     const { teamsUserCredential } = useContext(TeamsFxContext);
     const [formData, setFormData] = useState<FormData>({
-        dishName: dishName,
+        dish: dish,
         price: price,
         additionalInfo: additionalInfo,
         itemId: itemId,
-        groupOrderId: groupOrderId // Use the passed groupOrderId
+        orderId: orderId 
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [errors, setErrors] = useState<FormErrors>({});
@@ -74,8 +74,8 @@ const EditForm: React.FC<OrderItemFormProps> = ({ groupOrderId, itemId, dishName
 
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
-        if (!formData.dishName) {
-            newErrors.dishName = 'Dish name is required.';
+        if (!formData.dish) {
+            newErrors.dish = 'Dish name is required.';
         }
         if (!formData.price || parseFloat(formData.price) <= 0) {
             newErrors.price = 'Price must be a positive number.';
@@ -93,14 +93,13 @@ const EditForm: React.FC<OrderItemFormProps> = ({ groupOrderId, itemId, dishName
             const token = await teamsUserCredential.getToken("");
 
             const formattedData = {
-                dishName: formData.dishName,
+                dish: formData.dish,
                 price: parseFloat(formData.price),
                 additionalInfo: formData.additionalInfo,
-                groupOrderId: groupOrderId,
-                orderItemID: itemId
+                orderId: orderId,
             };
 
-            const response = await fetch('https://localhost:7125/OrderItem', {
+            const response = await fetch(`https://localhost:7125/item/${itemId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,17 +125,17 @@ const EditForm: React.FC<OrderItemFormProps> = ({ groupOrderId, itemId, dishName
             </DialogTrigger>
             <DialogSurface className={classes.formSurface}>
                 <DialogBody>
-                    <DialogTitle>Add Order Item {groupOrderId}</DialogTitle>
+                    <DialogTitle>Add Item</DialogTitle>
                     <DialogContent className={classes.formContent}>
                         <Field className={classes.field}
                             label="Dish Name"
-                            validationState={errors.dishName ? 'error' : 'none'}
-                            validationMessage={errors.dishName}
+                            validationState={errors.dish ? 'error' : 'none'}
+                            validationMessage={errors.dish}
                         >
                             <Input
-                                id="dishName"
-                                name="dishName"
-                                value={formData.dishName}
+                                id="dish"
+                                name="dish"
+                                value={formData.dish}
                                 onChange={handleChange}
                                 required
                             />

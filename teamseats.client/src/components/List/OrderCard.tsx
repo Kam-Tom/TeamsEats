@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Text,
     Caption1,
@@ -64,11 +64,11 @@ interface OrderCardProps extends OrderData {
     onClick: (id: number) => void;
 }
 
-const GroupOrderCard: React.FC<OrderCardProps> = ({ authorName, authorPhoto, deliveryCost, restaurant, status, id, isOwnedByUser, hasItemInOrder, closingTime, onClick }) => {
+const GroupOrderCard: React.FC<OrderCardProps> = ({ authorName, authorPhoto, deliveryCost, restaurant, status, id, isOwner, isParticipating, closingTime, onClick }) => {
     const classes = useStyles();
-    const canClick = status === Status.Open || isOwnedByUser || hasItemInOrder;
+    const canClick = status === Status.Open || isOwner || isParticipating;
     const cardStyle = mergeClasses(classes.card, (!canClick) && classes.inactive);
-    const iconRoundedStyle = mergeClasses(classes.iconRounded, hasItemInOrder && classes.hasItem, isOwnedByUser && classes.owner);
+    const iconRoundedStyle = mergeClasses(classes.iconRounded, isParticipating && classes.hasItem, isOwner && classes.owner);
     const iconCircleStyle = mergeClasses(classes.iconCircle, (status === Status.Open) && classes.open,
         (status === Status.Closed) && classes.closed,
         (status === Status.Delivered) && classes.delivered);
@@ -91,7 +91,7 @@ const GroupOrderCard: React.FC<OrderCardProps> = ({ authorName, authorPhoto, del
     < div className = { iconCircleStyle } > </div>
         < div className = { iconRoundedStyle } > </div>
             <div className={classes.bottomRow}>
-                < Text> {deliveryCost}$ </Text>
+                < Text> {deliveryCost.toFixed(2)}$ </Text>
                 <Timer targetTime={closingTime}></Timer>
 
             </div>

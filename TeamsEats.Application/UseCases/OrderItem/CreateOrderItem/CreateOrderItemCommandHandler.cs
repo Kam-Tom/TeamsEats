@@ -5,34 +5,31 @@ using TeamsEats.Domain.Services;
 
 namespace TeamsEats.Application.UseCases;
 
-public class CreateOrderItemCommandHandler : IRequestHandler<CreateOrderItemCommand>
+public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand>
 {
-    readonly IOrderItemsRepository _orderItemsRepository;
-    readonly IGroupOrderRepository _groupOrderRepository;
+    readonly IItemRepository _itemRepository;
     readonly IGraphService _graphService;
-    public CreateOrderItemCommandHandler(IOrderItemsRepository orderItemsRepository, IGroupOrderRepository groupOrderRepository, IGraphService graphService)
+    public CreateItemCommandHandler(IItemRepository itemRepository, IGraphService graphService)
     {
-        _orderItemsRepository = orderItemsRepository;
-        _groupOrderRepository = groupOrderRepository;
+        _itemRepository = itemRepository;
         _graphService = graphService;
     }
-    public async Task Handle(CreateOrderItemCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateItemCommand request, CancellationToken cancellationToken)
     {
-        var userID = await _graphService.GetUserID();
+        var userID = await _graphService.GetUserId();
         var userDisplayName = await _graphService.GetUserDisplayName(userID);
-        var groupOrder = await _groupOrderRepository.GetGroupOrderAsync(request.CreateOrderItemDTO.GroupOrderId);
 
-        var orderItem = new OrderItem()
+        var orderItem = new Item()
         {
-            UserId = userID,
-            UserDisplayName = userDisplayName,
-            DishName = request.CreateOrderItemDTO.DishName,
-            Price = request.CreateOrderItemDTO.Price,
-            AdditionalInfo = request.CreateOrderItemDTO.AdditionalInfo,
-            GroupOrder = groupOrder
+            AuthorId = userID,
+            AuthorName = userDisplayName,
+            Dish = request.CreateItemDTO.Dish,
+            Price = request.CreateItemDTO.Price,
+            AdditionalInfo = request.CreateItemDTO.AdditionalInfo,
+            OrderId = request.CreateItemDTO.OrderId
         };
 
-        await _orderItemsRepository.CreateOrderItemAsync(orderItem);
+        await _itemRepository.CreateItemAsync(orderItem);
 
     }
 }

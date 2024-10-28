@@ -3,7 +3,7 @@ import { ItemData } from "./ItemData";
 
 export interface DetailsData {
     id: number;
-    isOwnedByUser: boolean;
+    isOwner: boolean;
     authorName: string;
     authorPhoto: string;
     restaurant: string;
@@ -12,7 +12,7 @@ export interface DetailsData {
     minimalPrice: number;
     deliveryCost: number;
     minimalPriceForFreeDelivery: number;
-    orderItems: ItemData[];
+    items: ItemData[];
     status: Status;
     closingTime: Date;
 }

@@ -1,9 +1,9 @@
 export interface ItemData {
     id: number;
-    groupOrderId: number;
+    orderId: number;
     authorName: string;
     authorPhoto: string;
-    dishName: string;
+    dish: string;
     price: number;
     isOwner: boolean;
     additionalInfo: string;

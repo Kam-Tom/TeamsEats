@@ -15,19 +15,19 @@ import {
 import { TeamsFxContext } from '../Context';
 
 interface FormData {
-    dishName: string;
+    dish: string;
     price: string;
     additionalInfo: string;
-    groupOrderId: number;
+    orderId: number;
 }
 
 interface FormErrors {
-    dishName?: string;
+    dish?: string;
     price?: string;
 }
 
 interface OrderItemFormProps {
-    groupOrderId: number;
+    orderId: number;
 }
 
 const useStyles = makeStyles({
@@ -49,13 +49,13 @@ const useStyles = makeStyles({
     },
 });
 
-const OrderItemForm: React.FC<OrderItemFormProps> = ({ groupOrderId }) => {
+const OrderItemForm: React.FC<OrderItemFormProps> = ({ orderId }) => {
     const { teamsUserCredential } = useContext(TeamsFxContext);
     const [formData, setFormData] = useState<FormData>({
-        dishName: '',
+        dish: '',
         price: '',
         additionalInfo: '',
-        groupOrderId: groupOrderId // Use the passed groupOrderId
+        orderId: orderId
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [errors, setErrors] = useState<FormErrors>({});
@@ -68,8 +68,8 @@ const OrderItemForm: React.FC<OrderItemFormProps> = ({ groupOrderId }) => {
 
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
-        if (!formData.dishName) {
-            newErrors.dishName = 'Dish name is required.';
+        if (!formData.dish) {
+            newErrors.dish = 'Dish name is required.';
         }
         if (!formData.price || parseFloat(formData.price) <= 0) {
             newErrors.price = 'Price must be a positive number.';
@@ -87,12 +87,12 @@ const OrderItemForm: React.FC<OrderItemFormProps> = ({ groupOrderId }) => {
             const token = await teamsUserCredential.getToken("");
 
             const formattedData = {
-                dishName: formData.dishName,
+                dish: formData.dish,
                 price: parseFloat(formData.price),
                 additionalInfo: formData.additionalInfo,
-                groupOrderId: groupOrderId
+                orderId: orderId
             };
-            const response = await fetch('https://localhost:7125/OrderItem', {
+            const response = await fetch('https://localhost:7125/item', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -118,17 +118,17 @@ const OrderItemForm: React.FC<OrderItemFormProps> = ({ groupOrderId }) => {
             </DialogTrigger>
             <DialogSurface className={classes.formSurface}>
                 <DialogBody>
-                    <DialogTitle>Add Order Item {groupOrderId}</DialogTitle>
+                    <DialogTitle>Add Order Item</DialogTitle>
                     <DialogContent className={classes.formContent}>
                         <Field className={classes.field}
                             label="Dish Name"
-                            validationState={errors.dishName ? 'error' : 'none'}
-                            validationMessage={errors.dishName}
+                            validationState={errors.dish ? 'error' : 'none'}
+                            validationMessage={errors.dish}
                         >
                             <Input
-                                id="dishName"
-                                name="dishName"
-                                value={formData.dishName}
+                                id="dish"
+                                name="dish"
+                                value={formData.dish}
                                 onChange={handleChange}
                                 required
                             />

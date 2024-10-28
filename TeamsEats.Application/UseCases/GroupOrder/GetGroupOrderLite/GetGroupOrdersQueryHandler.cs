@@ -5,42 +5,42 @@ using TeamsEats.Domain.Services;
 
 namespace TeamsEats.Application.UseCases;
 
-public class GetGroupOrderLiteQueryHandler : IRequestHandler<GetGroupOrderLiteQuery, GroupOrderLiteDTO>
+public class GetOrderSummaryQueryHandler : IRequestHandler<GetOrderSummaryQuery, OrderSummaryDTO>
 {
-    readonly IGroupOrderRepository _groupOrderRepository;
+    readonly IOrderRepository _orderRepository;
     readonly IGraphService _graphService;
 
-    public GetGroupOrderLiteQueryHandler(IGroupOrderRepository groupOrderRepository, IGraphService graphService)
+    public GetOrderSummaryQueryHandler(IOrderRepository orderRepository, IGraphService graphService)
     {
-        _groupOrderRepository = groupOrderRepository;
+        _orderRepository = orderRepository;
         _graphService = graphService;
     }
 
-    public async Task<GroupOrderLiteDTO> Handle(GetGroupOrderLiteQuery request, CancellationToken cancellationToken)
+    public async Task<OrderSummaryDTO> Handle(GetOrderSummaryQuery request, CancellationToken cancellationToken)
     {
-        var groupOrder = await _groupOrderRepository.GetGroupOrderAsync(request.GroupOrderId);
+        var order = await _orderRepository.GetOrderAsync(request.Id);
         
-        var userId = await _graphService.GetUserID();
-        bool isOwnedByUser = groupOrder.UserId == userId;
-        bool hasItemInOrder = groupOrder.OrderItems.Exists(g => g.UserId == userId);
+        var userId = await _graphService.GetUserId();
+        bool isOwner = order.AuthorId == userId;
+        bool isParticipating = order.Items.Exists(g => g.AuthorId == userId);
 
-        double orderCost = groupOrder.OrderItems.Sum(o => o.Price);
-        double ordersCount = groupOrder.OrderItems.Count + 1;
-        double deliveryCost = orderCost > groupOrder.MinimalPriceForFreeDelivery ? 0 : groupOrder.DeliveryFee / ordersCount;
+        double orderCost = order.Items.Sum(o => o.Price);
+        double ordersCount = order.Items.Count + 1;
+        double deliveryCost = orderCost > order.MinimalPriceForFreeDelivery ? 0 : order.DeliveryFee / ordersCount;
 
-        var authorPhoto = await _graphService.GetPhoto(groupOrder.UserId);
+        var authorPhoto = await _graphService.GetPhoto(order.AuthorId);
 
-        var groupOrderDTO = new GroupOrderLiteDTO
+        var groupOrderDTO = new OrderSummaryDTO
         {
-            Id = groupOrder.Id,
-            IsOwnedByUser = isOwnedByUser,
-            HasItemInOrder = hasItemInOrder,
-            AuthorName = groupOrder.UserDisplayName,
+            Id = order.Id,
+            IsOwner = isOwner,
+            IsParticipating = isParticipating,
+            AuthorName = order.AuthorName,
             AuthorPhoto = authorPhoto,
-            Restaurant = groupOrder.RestaurantName,
+            Restaurant = order.Restaurant,
             DeliveryCost = deliveryCost,
-            Status = groupOrder.Status,
-            ClosingTime = groupOrder.ClosingTime
+            Status = order.Status,
+            ClosingTime = order.ClosingTime
         };
 
         return groupOrderDTO;

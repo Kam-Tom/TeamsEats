@@ -60,12 +60,12 @@ const DetailsPage: React.FC<DetailsPageProps> = ({ id }) => {
     const classes = useStyles();
     const connectionRef = useRef<signalR.HubConnection | null>(null);
 
-    const fetchDetails = async (id: string) => {
+    const fetchDetail = async (id: string) => {
         try {
             if (!teamsUserCredential) return;
             const token = await teamsUserCredential.getToken("");
 
-            const response = await fetch(`https://localhost:7125/GroupOrderDetails/${id}`, {
+            const response = await fetch(`https://localhost:7125/order/${id}/detail`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token!.token}`
@@ -89,7 +89,7 @@ const DetailsPage: React.FC<DetailsPageProps> = ({ id }) => {
     useEffect(() => {
         const loadData = async () => {
             if (id) {
-                const data = await fetchDetails(id);
+                const data = await fetchDetail(id);
                 if (data) {
                     setDetailsData(data);
                 }
@@ -105,21 +105,21 @@ const DetailsPage: React.FC<DetailsPageProps> = ({ id }) => {
             const token = await teamsUserCredential.getToken("");
 
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl('https://localhost:7125/groupOrderHub', {
+                .withUrl('https://localhost:7125/orderHub', {
                     accessTokenFactory: () => token!.token
                 })
                 .withAutomaticReconnect()
                 .build();
 
-            connection.on('GroupOrderUpdated', async (groupOrderId: number) => {
-                if (id === groupOrderId.toString()) {
-                    const updatedDetails = await fetchDetails(groupOrderId.toString());
+            connection.on('OrderUpdated', async (orderId: number) => {
+                if (id === orderId.toString()) {
+                    const updatedDetails = await fetchDetail(orderId.toString());
                     if (updatedDetails) {
                         setDetailsData(updatedDetails);
                     }
                 }
             });
-            connection.on('GroupOrderDeleted', async (groupOrderId: number) => {
+            connection.on('OrderDeleted', async (groupOrderId: number) => {
                 if (id === groupOrderId.toString()) {
                     handleBackToList();
                 }
