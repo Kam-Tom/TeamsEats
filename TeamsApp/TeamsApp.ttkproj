@@ -4,6 +4,10 @@
     <ProjectGuid>58b28f99-7e33-4c44-ad25-b2827124b4f2</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="aad.manifest.json" />
+    <None Include="TeamsEats.zip" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectCapability Include="ProjectConfigurationsDeclaredDimensions" />
   </ItemGroup>
   <ProjectExtensions>
