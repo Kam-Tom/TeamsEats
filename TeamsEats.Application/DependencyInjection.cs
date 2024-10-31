@@ -7,6 +7,9 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(m => m.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+        services.AddAutoMapper(cfg => ApplicationMapperConfig.InitializeAutomapper(cfg));
+
         return services;
     }
 

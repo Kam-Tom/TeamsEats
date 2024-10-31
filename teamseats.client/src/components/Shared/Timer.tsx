@@ -8,7 +8,7 @@ const useStyles = makeStyles({
 });
 
 interface TimerProps {
-    targetTime: Date; 
+    targetTime: Date;
 }
 
 const Timer: React.FC<TimerProps> = ({ targetTime }) => {
@@ -23,7 +23,6 @@ const Timer: React.FC<TimerProps> = ({ targetTime }) => {
         const m = Math.max(Math.floor((time / 1000 / 60) % 60), 0);
         setHours(h);
         setMinutes(m);
-
     };
 
     useEffect(() => {
@@ -33,10 +32,12 @@ const Timer: React.FC<TimerProps> = ({ targetTime }) => {
         return () => clearInterval(interval);
     }, [targetTime]);
 
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
 
     return (
         <div className={`${hours <= 0 ? classes.red : ''}`}>
-            {`${hours}:${minutes}`}
+            {`${formattedHours}:${formattedMinutes}`}
         </div>
     );
 };

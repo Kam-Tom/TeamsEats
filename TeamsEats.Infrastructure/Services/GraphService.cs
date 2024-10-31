@@ -63,7 +63,7 @@ internal class GraphService : IGraphService
         await _graphServiceClient.Chats[chat.Id].Messages.Request().AddAsync(chatMessage);
     }
 
-    public async Task SendActivityFeedTypeClosed(string addresserId, string addresseeId, string restaurant, int orderId)
+    public async Task SendActivityFeedTypeOrdered(string addresserId, string addresseeId, string restaurant, int orderId)
     {
         await SendActivityNotification(addresseeId, "orderClosed", "Everyone is waiting for your payment.",
             $"https://teams.microsoft.com/l/entity/{_appId}/?webUrl=https://localhost:44302/tab/{orderId}",

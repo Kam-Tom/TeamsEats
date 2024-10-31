@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Body1,
     Subtitle2,
@@ -6,7 +6,8 @@ import {
     Card,
     Dropdown,
     Option,
-    Button
+    Button,
+    Tooltip
 } from "@fluentui/react-components";
 import { makeStyles, tokens } from '@fluentui/react-components';
 import ItemCard from './ItemCard';
@@ -41,23 +42,39 @@ const useStyles = makeStyles({
         marginTop: '16px',
         backgroundColor: tokens.colorPaletteRedBackground3,
         color: tokens.colorNeutralForegroundInverted,
-    }
+    },
+    toPay: {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        maxWidth: '200px',
+    },
+    errorMessage: {
+        color: tokens.colorPaletteRedForeground2,
+        backgroundColor: tokens.colorPaletteRedBackground2,
+        border: `1px solid ${tokens.colorPaletteRedBorder2}`,
+        padding: '12px 16px',
+        borderRadius: '6px',
+        marginTop: '16px',
+        fontSize: '14px',
+        lineHeight: '1.5',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+    },
 });
 
-
-
-const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restaurant, phoneNumber, bankAccount, minimalPrice, deliveryCost, minimalPriceForFreeDelivery, items, status, closingTime }) => {
+const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restaurant, phoneNumber, bankAccount, currentPrice, minimalPrice, currentDeliveryFee, minimalPriceForFreeDelivery, items, status, closingTime, myCost }) => {
 
     const { teamsUserCredential } = React.useContext(TeamsFxContext);
     const classes = useStyles();
+    const [error, setError] = useState<string | null>(null);
+
 
     const handleChangeStatus = async (newStatus: Status) => {
         if (!teamsUserCredential) return;
 
         const token = await teamsUserCredential.getToken("");
-        const changeStatusDTO = {
-            Status: newStatus
-        };
 
         try {
             const response = await fetch(`https://localhost:7125/order/${id}`, {
@@ -66,17 +83,20 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restauran
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token!.token}`
                 },
-                body: JSON.stringify(changeStatusDTO)
+                body: JSON.stringify(newStatus)
             });
 
             if (!response.ok) {
-                console.error(`Failed to change status: ${response.statusText}`);
+                const errorMessage = await response.json();
+                setError(errorMessage.detail);
+            } else {
+                setError(null);
             }
         } catch (error) {
             console.error('Error during status change:', error);
+            setError("A network error occurred. Please try again.");
         }
     };
-
     const handleDeleteOrder = async () => {
         if (!teamsUserCredential) return;
 
@@ -112,17 +132,19 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restauran
                     <Subtitle1>Details</Subtitle1>
                     <div className={classes.grid}>
                         <Body1>{`Restaurant: ${restaurant}`}</Body1>
-                        <Body1>{`Minimal price: ${minimalPrice}`}</Body1>
+                        <Body1>{`Minimal price: ${minimalPrice}$`}</Body1>
                         <Body1>Closing Time: <Timer targetTime={closingTime} /></Body1>
                         <Body1>{`Author: ${authorName}`}</Body1>
+                        <Body1>{`Current Price: ${currentPrice}$`}</Body1>
+                        <Body1>{`Minimal Price: ${minimalPrice}$`}</Body1>
                     </div>
                 </div>
                 <div className={classes.section}>
                     <Subtitle2>Delivery</Subtitle2>
                     <div className={classes.grid}>
-                        <Body1>{`Minimal for free delivery: ${minimalPriceForFreeDelivery}`}</Body1>
+                        <Body1>{`Delivery Fee: ${currentDeliveryFee}$`}</Body1>
+                        <Body1>{`Minimal for free delivery: ${minimalPriceForFreeDelivery}$`}</Body1>
                         <Body1>{`Status: ${Status[status]}`}</Body1>
-                        <Body1>{`Delivery fee: ${deliveryCost.toFixed(2)}`}</Body1>
                     </div>
                 </div>
                 <div className={classes.section}>
@@ -130,8 +152,14 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restauran
                     <div className={classes.grid}>
                         <Body1>{`Phone number: ${phoneNumber}`}</Body1>
                         <Body1>{`Bank account: ${bankAccount}`}</Body1>
+                        {myCost > 0 && (
+                            <Tooltip content={`${myCost}$ + ${currentDeliveryFee}$`} relationship="description">
+                                <Body1 className={classes.toPay}>{`To Pay: ${myCost + currentDeliveryFee}$`}</Body1>
+                            </Tooltip>
+                        )}
                     </div>
                 </div>
+                {error && <div className={classes.errorMessage}>{error}</div>}
                 {isOwner && (
                     <div>
                         <div className={classes.dropdownContainer}>
@@ -140,10 +168,10 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restauran
                                 id="status-dropdown"
                                 placeholder="Select status"
                                 onActiveOptionChange={onActiveOptionChange}
-                                defaultValue={Status[status]}
+                                value={Status[status]}
                             >
                                 <Option value={Status.Open}>Open</Option>
-                                <Option value={Status.Closed}>Closed</Option>
+                                <Option value={Status.Ordered}>Ordered</Option>
                                 <Option value={Status.Delivered}>Delivered</Option>
                             </Dropdown>
                         </div>
@@ -154,7 +182,7 @@ const DetailsCard: React.FC<DetailsData> = ({ id, isOwner, authorName, restauran
                     <Subtitle2>Items</Subtitle2>
                     <ItemForm orderId={id} />
                     {items.map((item: ItemData) => (
-                        <ItemCard key={item.id} {...item} orderId={id} canComment={isOwner} canEdit={item.isOwner && status == Status.Open} deliveryCost={deliveryCost} />
+                        <ItemCard key={item.id} {...item} orderId={id} canComment={isOwner} canEdit={item.isOwner && status == Status.Open} />
                     ))}
                 </div>
             </Card>

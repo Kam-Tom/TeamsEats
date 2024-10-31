@@ -3,4 +3,4 @@ using TeamsEats.Application.DTOs;
 
 namespace TeamsEats.Application.UseCases;
 
-public record UpdateItemCommand(UpdateItemDTO UpdateItemDTO) : IRequest;
+public record UpdateItemCommand(UpdateItemDTO UpdateItemDTO,int ItemId, string UserId) : IRequest;

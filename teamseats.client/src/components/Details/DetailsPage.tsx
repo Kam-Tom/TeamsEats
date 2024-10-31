@@ -12,10 +12,10 @@ const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100vw',
-        height: '100vh',
+        width: '98vw',
+        minHeight: '100vh',
         position: 'relative',
-        overflowY: 'scroll',
+        overflowY: 'hidden',
     },
     backButton: {
         position: 'absolute',

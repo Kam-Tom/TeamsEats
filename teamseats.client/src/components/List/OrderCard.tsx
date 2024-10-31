@@ -12,8 +12,9 @@ import Timer from '../Shared/Timer';
 
 const useStyles = makeStyles({
     card: {
-        width: '300px',
+        width: '100%',
         position: 'relative',
+        marginBottom: '1rem',
     },
     inactive: {
         opacity: 0.5,
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
     delivered: {
         backgroundColor: tokens.colorPaletteMarigoldBorder2,
     },
-    closed: {
+    ordered: {
         backgroundColor: tokens.colorPaletteRedBackground3,
     },
     open: {
@@ -49,14 +50,53 @@ const useStyles = makeStyles({
         right: '8px',
         borderRadius: tokens.borderRadiusXLarge,
     },
-    bottomRow: {
-        display: 'flex',
-        justifyContent: 'space-around',
-
-        width:'100%',
+    description: {
+        textWrap: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap', 
+        maxWidth: '120px', 
     },
-    topRow: {
+    header: {
+        width: '100%',
+    },
+    cardBody: {
+        display: 'flex',
+        padding: '0.5rem',
+        justifyContent: 'space-around', 
+        flex: '1',
+        flexWrap: 'wrap', 
+    },
+    cardBodySection: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        minWidth: '100px', 
+        flexGrow: 1, 
+        textAlign: 'center', 
+    },
+    sectionHeader: {
+        color: tokens.colorNeutralStrokeAccessible,
+        fontSize: tokens.fontSizeBase200,
+    },
+    sectionMain: {
+        color: tokens.colorBrandForegroundOnLight,
+        fontSize: tokens.fontSizeBase400,
+        fontWeight: tokens.fontWeightSemibold,
+    },
+    minimalPrice: {
+        color: tokens.colorNeutralStrokeAccessible,
+        fontSize: tokens.fontSizeBase200,
+    },
+    currentDeliveryFeeGreen: {
+        color: 'green',
+    },
+    currentPriceRed: {
         color: 'red',
+    },
+    none: {
+        display: 'none',
     }
 });
 
@@ -64,39 +104,74 @@ interface OrderCardProps extends OrderData {
     onClick: (id: number) => void;
 }
 
-const GroupOrderCard: React.FC<OrderCardProps> = ({ authorName, authorPhoto, deliveryCost, restaurant, status, id, isOwner, isParticipating, closingTime, onClick }) => {
+const OrderCard: React.FC<OrderCardProps> = ({
+    authorName,
+    authorPhoto,
+    currentDeliveryFee,
+    myCost,
+    currentPrice,
+    minimalPrice,
+    restaurant,
+    status,
+    id,
+    isOwner,
+    closingTime,
+    onClick
+}) => {
     const classes = useStyles();
-    const canClick = status === Status.Open || isOwner || isParticipating;
+    const canClick = status === Status.Open || isOwner || myCost!==0;
+
     const cardStyle = mergeClasses(classes.card, (!canClick) && classes.inactive);
-    const iconRoundedStyle = mergeClasses(classes.iconRounded, isParticipating && classes.hasItem, isOwner && classes.owner);
+    const iconRoundedStyle = mergeClasses(classes.iconRounded, myCost !== 0 && classes.hasItem, isOwner && classes.owner);
     const iconCircleStyle = mergeClasses(classes.iconCircle, (status === Status.Open) && classes.open,
-        (status === Status.Closed) && classes.closed,
+        (status === Status.Ordered) && classes.ordered,
         (status === Status.Delivered) && classes.delivered);
 
     const photoSrc = authorPhoto ? (authorPhoto.startsWith('data:image') ? authorPhoto : `data:image/jpeg;base64,${authorPhoto}`) : '/path/to/default/avatar.png';
 
-
     return (
         <Card
-            orientation= "horizontal"
-    className = { cardStyle }
-    onClick = {() => { if (canClick) onClick(id) }}>
-    <CardHeader
-                image={ <Avatar name={ authorName } image = {{ src: photoSrc } } />}
-                header={< Text weight="semibold" className={classes.topRow}> {restaurant}</Text>}
-                description={ < Caption1> {authorName} </Caption1>
-
-                }
+            orientation="horizontal"
+            className={cardStyle}
+            onClick={() => { if (canClick) onClick(id) }}>
+            <CardHeader
+                image={<Avatar name={authorName} image={{ src: photoSrc }} />}
+                header={<Text weight="semibold" className={classes.header}> {restaurant}</Text>}
+                description={<Caption1 className={classes.description}> {authorName} </Caption1>}
             />
-    < div className = { iconCircleStyle } > </div>
-        < div className = { iconRoundedStyle } > </div>
-            <div className={classes.bottomRow}>
-                < Text> {deliveryCost.toFixed(2)}$ </Text>
-                <Timer targetTime={closingTime}></Timer>
+            <div className={iconCircleStyle}></div>
+            <div className={iconRoundedStyle}></div>
 
-            </div>
-            </Card>
+                <div className={classes.cardBody}>
+
+                        <div className={classes.cardBodySection}>
+                            <span className={classes.sectionHeader}> Delivery Fee </span>
+                            <span className={currentDeliveryFee === 0 ? classes.currentDeliveryFeeGreen : classes.sectionMain}>
+                                {currentDeliveryFee}$
+                            </span>
+                        </div>
+
+                        <div className={classes.cardBodySection}>
+                            <span className={classes.sectionHeader}> Order Sum </span>
+                            <span className={currentPrice < minimalPrice ? classes.currentPriceRed : classes.sectionMain}>
+                                {currentPrice}$ / <span className={classes.minimalPrice}>{minimalPrice}$</span>
+                            </span>
+                        </div>
+
+                <div className={myCost !== 0 ? classes.cardBodySection : classes.none}>
+                    <span className={classes.sectionHeader}> My Cost </span>
+                    <span className={classes.sectionMain}> {myCost + currentDeliveryFee}$ </span>
+                        </div>
+
+                        <div className={classes.cardBodySection}>
+                            <span className={classes.sectionHeader}> Closing Time </span>
+                            <Timer targetTime={closingTime}></Timer>
+                        </div>
+
+                </div>
+
+        </Card>
     );
-}
+};
 
-export default GroupOrderCard;
+export default OrderCard;

@@ -17,7 +17,7 @@ const useStyles = makeStyles({
         alignItems: 'center',
     },
     imageContainer: {
-        flex: '1',
+        flex:'1',
         display: 'flex',
         justifyContent: 'center',
         padding: '5%',
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
         },
     },
     image: {
-        maxHeight: '400px',
+        width:'100%',
         aspectRatio: '1/1',
     },
     listContainer: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles({
         '@media (max-width: 768px)': {
             flex: '1',
         },
+        padding:'1rem',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -44,8 +45,7 @@ const useStyles = makeStyles({
         backgroundColor: tokens.colorNeutralBackground2,
         height: '80vh',
         overflowY: 'auto',
-        minWidth: '300px',
-
+        width:'100%',
     },
     errorWrapper: {
         display: 'flex',
@@ -80,7 +80,6 @@ const ListPage: React.FC = () => {
         try {
             if (!teamsUserCredential) return;
             const token = await teamsUserCredential.getToken("");
-
             const response = await fetch('https://localhost:7125/order', {
                 method: 'GET',
                 headers: {

@@ -39,8 +39,8 @@ public interface IGraphService
     /// <param name="addresserId">The sender's ID.</param>
     /// <param name="addresseeId">The recipient's ID.</param>
     /// <param name="restaurant">The restaurant name.</param>
-    /// <param name="groupOrderId">The group order ID.</param>
-    Task SendActivityFeedTypeClosed(string addresserId, string addresseeId, string restaurant, int groupOrderId);
+    /// <param name="orderId">The group order ID.</param>
+    Task SendActivityFeedTypeOrdered(string addresserId, string addresseeId, string restaurant, int orderId);
 
     /// <summary>
     /// Sends a notification indicating an order has been deleted.
@@ -55,6 +55,6 @@ public interface IGraphService
     /// </summary>
     /// <param name="addresserId">The sender's ID.</param>
     /// <param name="addresseeId">The recipient's ID.</param>
-    /// <param name="groupOrderId">The group order ID.</param>
-    Task SendActivityFeedTypeDelivered(string addresserId, string addresseeId, int groupOrderId);
+    /// <param name="orderId">The group order ID.</param>
+    Task SendActivityFeedTypeDelivered(string addresserId, string addresseeId, int orderId);
 }

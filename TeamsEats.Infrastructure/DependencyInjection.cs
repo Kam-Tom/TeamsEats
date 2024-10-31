@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using TeamsEats.Domain.Interfaces;
 using TeamsEats.Domain.Services;
 using TeamsEats.Infrastructure.Repositories;
@@ -15,11 +14,15 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("TeamsEats.Infrastructure"));
+            options.UseLazyLoadingProxies()
+                .UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                    x => x.MigrationsAssembly("TeamsEats.Infrastructure"));
         });
-        services.AddScoped<IItemRepository, ItemsRepository>();
+
         services.AddScoped<IOrderRepository, OrderRepository>();
 
+
+        services.AddAutoMapper(cfg => InfrastructureMapperConfig.InitializeAutomapper(cfg));
         services.AddScoped<IGraphService, GraphService>();
 
         return services;

@@ -77,21 +77,21 @@ const OrderForm: React.FC = () => {
 
         if (!formData.phoneNumber) {
             newErrors.phoneNumber = 'Phone number is required.';
-        } else if (formData.phoneNumber.length < 9 || formData.phoneNumber.length > 11) {
-            newErrors.phoneNumber = 'Phone number must be between 9 and 11 characters.';
+        } else if (formData.phoneNumber.length !== 9) {
+            newErrors.phoneNumber = 'Phone number must be 9 characters.';
         }
 
         if (!formData.bankAccount) {
             newErrors.bankAccount = 'Bank account is required.';
-        } else if (formData.bankAccount.length < 8 || formData.bankAccount.length > 17) {
-            newErrors.bankAccount = 'Bank account must be between 8 and 17 characters.';
+        } else if (formData.bankAccount.length !== 26) {
+            newErrors.bankAccount = 'Bank account must be 26 characters.';
         }
 
         if (!formData.restaurant) {
             newErrors.restaurant = 'Restaurant name is required.';
         }
-        if (!formData.minimalPrice || parseFloat(formData.minimalPrice) <= 0) {
-            newErrors.minimalPrice = 'Minimal price must be a positive number.';
+        if (!formData.minimalPrice || parseFloat(formData.minimalPrice) < 0) {
+            newErrors.minimalPrice = 'Minimal price cannot be negative.';
         }
         if (!formData.deliveryFee || parseFloat(formData.deliveryFee) < 0) {
             newErrors.deliveryFee = 'Delivery fee cannot be negative.';
@@ -153,7 +153,7 @@ const OrderForm: React.FC = () => {
     return (
         <Dialog open={isDialogOpen} onOpenChange={(_, data) => setIsDialogOpen(data.open)}>
             <DialogTrigger disableButtonEnhancement>
-                <Button onClick={() => setIsDialogOpen(true)}>Add Item</Button>
+                <Button onClick={() => setIsDialogOpen(true)}>Add Order</Button>
             </DialogTrigger>
             <DialogSurface className={classes.formSurface}>
                 <DialogBody>

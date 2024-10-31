@@ -26,7 +26,7 @@ interface FormErrors {
     price?: string;
 }
 
-interface OrderItemFormProps {
+interface ItemFormProps {
     orderId: number;
 }
 
@@ -49,7 +49,7 @@ const useStyles = makeStyles({
     },
 });
 
-const OrderItemForm: React.FC<OrderItemFormProps> = ({ orderId }) => {
+const ItemForm: React.FC<ItemFormProps> = ({ orderId }) => {
     const { teamsUserCredential } = useContext(TeamsFxContext);
     const [formData, setFormData] = useState<FormData>({
         dish: '',
@@ -172,4 +172,4 @@ const OrderItemForm: React.FC<OrderItemFormProps> = ({ orderId }) => {
     );
 }
 
-export default OrderItemForm;
+export default ItemForm;

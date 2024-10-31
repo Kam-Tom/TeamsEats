@@ -18,11 +18,14 @@ namespace TeamsEats.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TeamsEats.Domain.Models.Item", b =>
+            modelBuilder.Entity("ItemEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,17 +52,18 @@ namespace TeamsEats.Infrastructure.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Items");
+                    b.ToTable("items");
                 });
 
-            modelBuilder.Entity("TeamsEats.Domain.Models.Order", b =>
+            modelBuilder.Entity("OrderEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,21 +80,34 @@ namespace TeamsEats.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BankAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ClosingTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("DeliveryFee")
-                        .HasColumnType("float");
+                    b.Property<decimal>("CurrentDeliveryFee")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
-                    b.Property<double>("MinimalPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal>("CurrentPrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
-                    b.Property<double>("MinimalPriceForFreeDelivery")
-                        .HasColumnType("float");
+                    b.Property<decimal>("DeliveryFee")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("MinimalPrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("MinimalPriceForFreeDelivery")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Restaurant")
@@ -102,12 +119,12 @@ namespace TeamsEats.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("orders");
                 });
 
-            modelBuilder.Entity("TeamsEats.Domain.Models.Item", b =>
+            modelBuilder.Entity("ItemEntity", b =>
                 {
-                    b.HasOne("TeamsEats.Domain.Models.Order", "Order")
+                    b.HasOne("OrderEntity", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -116,7 +133,7 @@ namespace TeamsEats.Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("TeamsEats.Domain.Models.Order", b =>
+            modelBuilder.Entity("OrderEntity", b =>
                 {
                     b.Navigation("Items");
                 });

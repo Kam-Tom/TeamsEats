@@ -38,5 +38,12 @@ public interface IOrderRepository
     /// </summary>
     /// <param name="order">The order to update.</param>
     /// <returns>The updated order.</returns>
-    Task<Order> UpdateOrderAsync(Order order);
+    Task UpdateOrderAsync(Order order);
+
+    /// <summary>
+    /// Retrieves an item by its ID.
+    /// </summary>
+    /// <param name="itemId">The ID of the item.</param>
+    /// <returns>The requested item, if found.</returns>
+    Task<Item> GetItemAsync(int itemId);
 }

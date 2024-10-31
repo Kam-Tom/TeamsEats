@@ -9,6 +9,7 @@ internal class AppDbContext : DbContext
     : base(options)
     {
     }
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<Item> Items { get; set; }
+    public DbSet<OrderEntity> Orders { get; set; }
+    public DbSet<ItemEntity> Items { get; set; }
+
 }

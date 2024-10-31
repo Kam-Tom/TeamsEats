@@ -3,11 +3,13 @@ import { Status } from "./Status";
 export interface OrderData {
     id: number;
     isOwner: boolean;
-    isParticipating: boolean;
     authorName: string;
     authorPhoto: string;
-    deliveryCost: number;
+    currentDeliveryFee: number;
+    currentPrice: number;
+    minimalPrice: number;
     restaurant: string;
     status: Status;
     closingTime: Date;
+    myCost: number;
 }

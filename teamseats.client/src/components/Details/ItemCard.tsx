@@ -76,13 +76,12 @@ const useStyles = makeStyles({
     },
 });
 
-interface OrderItemCardProps extends ItemData {
+interface ItemCardProps extends ItemData {
     canComment: boolean;
-    deliveryCost: number;
     canEdit: boolean;
 }
 
-const OrderItemCard: React.FC<OrderItemCardProps> = ({
+const ItemCard: React.FC<ItemCardProps> = ({
     authorName,
     authorPhoto,
     isOwner,
@@ -92,7 +91,6 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
     price,
     additionalInfo,
     id,
-    deliveryCost,
     canEdit,
 }) => {
     const [comment, setComment] = useState('');
@@ -110,9 +108,6 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
         if (!teamsUserCredential) return;
 
         const token = await teamsUserCredential.getToken("");
-        const commentItemDTO = {
-            Message: comment
-        };
 
         try {
             const response = await fetch(`https://localhost:7125/item/${id}/comments`, {
@@ -121,7 +116,7 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token!.token}`
                 },
-                body: JSON.stringify(commentItemDTO)
+                body: JSON.stringify(comment)
             });
 
             if (response.ok) {
@@ -166,9 +161,7 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
             />
 
             <div className={classes.content}>
-                <Tooltip content={`${price.toFixed(2)}$ + ${deliveryCost.toFixed(2)}$`} relationship="description">
-                    <Text>{`Price: ${(price + deliveryCost).toFixed(2)}$ `}</Text>
-                </Tooltip>
+                <Text>{`Price: ${price }$ `}</Text>
                 <Tooltip content={additionalInfo} relationship="description">
                     <Text className={classes.additionalInfo}>{additionalInfo}</Text>
                 </Tooltip>
@@ -207,4 +200,4 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({
     );
 }
 
-export default OrderItemCard;
+export default ItemCard;

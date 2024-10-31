@@ -10,9 +10,11 @@ export interface DetailsData {
     phoneNumber: string;
     bankAccount: string;
     minimalPrice: number;
-    deliveryCost: number;
+    currentPrice: number;
+    currentDeliveryFee: number;
     minimalPriceForFreeDelivery: number;
     items: ItemData[];
     status: Status;
     closingTime: Date;
+    myCost: number;
 }

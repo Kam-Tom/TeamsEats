@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataAnnotationsExtensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace TeamsEats.Application.DTOs;
 public class CreateItemDTO
@@ -10,8 +11,8 @@ public class CreateItemDTO
     public string Dish { get; set; }
 
     [Required]
-    [Range(0, double.MaxValue)]
-    public double Price { get; set; }
+    [Min(0)]
+    public decimal Price { get; set; }
 
     public string AdditionalInfo { get; set; }
 
