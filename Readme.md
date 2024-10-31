@@ -25,17 +25,19 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Response**:
     ```json
     [
-            {
-                    "id": 0,
-                    "isOwner": true,
-                    "isParticipating": true,
-                    "authorName": "string",
-                    "authorPhoto": "string",
-                    "deliveryCost": 0,
-                    "restaurant": "string",
-                    "status": 0,
-                    "closingTime": "2024-10-28T09:41:11.857Z"
-            }
+      {
+        "id": 0,
+        "isOwner": true,
+        "authorName": "string",
+        "authorPhoto": "string",
+        "currentDeliveryFee": 0,
+        "currentPrice": 0,
+        "minimalPrice": 0,
+        "restaurant": "string",
+        "status": 0,
+        "closingTime": "2024-10-31T12:40:35.600Z",
+        "myCost": 0
+      }
     ]
     ```
 
@@ -46,15 +48,17 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Response**:
     ```json
     {
-            "id": 0,
-            "isOwner": true,
-            "isParticipating": true,
-            "authorName": "string",
-            "authorPhoto": "string",
-            "deliveryCost": 0,
-            "restaurant": "string",
-            "status": 0,
-            "closingTime": "2024-10-28T09:43:16.000Z"
+      "id": 0,
+      "isOwner": true,
+      "authorName": "string",
+      "authorPhoto": "string",
+      "currentDeliveryFee": 0,
+      "currentPrice": 0,
+      "minimalPrice": 0,
+      "restaurant": "string",
+      "status": 0,
+      "closingTime": "2024-10-31T12:41:07.462Z",
+      "myCost": 0
     }
     ```
 
@@ -65,30 +69,32 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Response**:
     ```json
     {
-            "id": 0,
-            "isOwner": true,
-            "authorName": "string",
-            "authorPhoto": "string",
-            "restaurant": "string",
-            "phoneNumber": "string",
-            "bankAccount": "string",
-            "minimalPrice": 0,
-            "deliveryCost": 0,
-            "minimalPriceForFreeDelivery": 0,
-            "items": [
-                    {
-                            "id": 0,
-                            "authorPhoto": "string",
-                            "authorName": "string",
-                            "dish": "string",
-                            "price": 0,
-                            "isOwner": true,
-                            "orderId": 0,
-                            "additionalInfo": "string"
-                    }
-            ],
-            "status": 0,
-            "closingTime": "2024-10-28T09:45:21.085Z"
+      "id": 0,
+      "isOwner": true,
+      "authorName": "string",
+      "authorPhoto": "string",
+      "restaurant": "string",
+      "phoneNumber": "string",
+      "bankAccount": "string",
+      "minimalPrice": 0,
+      "currentDeliveryFee": 0,
+      "currentPrice": 0,
+      "minimalPriceForFreeDelivery": 0,
+      "items": [
+        {
+          "id": 0,
+          "authorPhoto": "string",
+          "authorName": "string",
+          "dish": "string",
+          "price": 0,
+          "isOwner": true,
+          "orderId": 0,
+          "additionalInfo": "string"
+        }
+      ],
+      "status": 0,
+      "closingTime": "2024-10-31T12:41:20.863Z",
+      "myCost": 0
     }
     ```
 
@@ -99,13 +105,13 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Request Body**:
     ```json
     {
-            "phoneNumber": "string",
-            "bankAccount": "string",
-            "restaurant": "string",
-            "minimalPrice": 0,
-            "deliveryFee": 0,
-            "minimalPriceForFreeDelivery": 0,
-            "closingTime": "2024-10-28T09:42:51.122Z"
+      "phoneNumber": "string",
+      "bankAccount": "string",
+      "restaurant": "string",
+      "minimalPrice": 0,
+      "deliveryFee": 0,
+      "minimalPriceForFreeDelivery": 0,
+      "closingTime": "2024-10-31T12:41:41.019Z"
     }
     ```
 - **Response**: `200 Success`
@@ -117,17 +123,16 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Request Body**:
     ```json
     {
-            "id": 0,
             "status": 0
     }
     ```
-- **Response**: `200 Success`
+- **Response**: `204 No Content`
 
 #### 6. Delete Order
 - **URL**: `/order/{id}`
 - **Method**: `DELETE`
 - **Description**: Delete an order.
-- **Response**: `200 Success`
+- **Response**: `204 No Content`
 
 #### 7. Create Item
 - **URL**: `/item`
@@ -136,13 +141,13 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Request Body**:
     ```json
     {
-            "orderId": 0,
-            "dish": "string",
-            "price": 0,
-            "additionalInfo": "string"
+      "orderId": 0,
+      "dish": "string",
+      "price": 0,
+      "additionalInfo": "string"
     }
     ```
-- **Response**: `200 Success`
+- **Response**: `201 Created`
 
 #### 8. Update Item
 - **URL**: `/item/{id}`
@@ -151,20 +156,19 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Request Body**:
     ```json
     {
-            "id": 0,
-            "orderId": 0,
-            "dish": "string",
-            "price": 0,
-            "additionalInfo": "string"
+      "orderId": 0,
+      "dish": "string",
+      "price": 0,
+      "additionalInfo": "string"
     }
     ```
-- **Response**: `200 Success`
+- **Response**: `204 No Content`
 
 #### 9. Delete Item
 - **URL**: `/item/{id}`
 - **Method**: `DELETE`
 - **Description**: Delete an item.
-- **Response**: `200 Success`
+- **Response**: `204 No Content`
 
 #### 10. Comment Item
 - **URL**: `/item/{id}/comments`
@@ -173,8 +177,7 @@ The base URL for all API endpoints is: `https://localhost:7125`
 - **Request Body**:
     ```json
     {
-            "itemId": 0,
             "message": "string"
     }
     ```
-- **Response**: `200 Success`
+- **Response**: `204 No Content`
