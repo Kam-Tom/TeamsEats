@@ -1,6 +1,0 @@
-@TeamsEats.Server_HostAddress = http://localhost:5231
-
-GET {{TeamsEats.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

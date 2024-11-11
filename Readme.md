@@ -6,6 +6,7 @@ This repository contains the following projects:
 
 - **TeamsApp**: Teams app manifest.
 - **TeamsEats.Application**: Application logic and use cases.
+- **TeamsEats.Application.Tests**: Application layer tests.
 - **TeamsEats.Domain**: Models, enums, and interfaces.
 - **TeamsEats.Infrastructure**: Implementation of services and database access.
 - **TeamsEats.Server**: API for the application.
